@@ -1,14 +1,17 @@
 package br.edu.iff.jogoforca.dominio.jogador;
 
 public class JogadorNaoEncontradoException extends Exception {
-    private String jogador;
+	
+	private static final long serialVersionUID = 1L;
+	
+	private String jogador;
+	
+	public JogadorNaoEncontradoException(String jogador) {
+		this.jogador = jogador;
+	}
 
-    public JogadorNaoEncontradoException(String jogador) {
-        super("Jogador não encontrado: " + jogador);
-        this.jogador = jogador;
-    }
-
-    public String getJogador() {
-        return jogador;
-    }
+	public String getJogador() {
+		return jogador;
+	}
+	
 }

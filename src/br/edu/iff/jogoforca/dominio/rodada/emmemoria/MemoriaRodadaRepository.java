@@ -48,7 +48,7 @@ public class MemoriaRodadaRepository implements RodadaRepository {
     @Override
     public void inserir(Rodada rodada) throws RepositoryException {
         if (getPorId(rodada.getId()) != null) {
-            throw new RepositoryException("Rodada já existente.");
+            throw new RepositoryException();
         }
         rodadas.add(rodada);
     }
@@ -57,7 +57,7 @@ public class MemoriaRodadaRepository implements RodadaRepository {
     public void atualizar(Rodada rodada) throws RepositoryException {
         Rodada existente = getPorId(rodada.getId());
         if (existente == null) {
-            throw new RepositoryException("Rodada não encontrada para atualização.");
+            throw new RepositoryException();
         }
         rodadas.set(rodadas.indexOf(existente), rodada);
     }
@@ -65,7 +65,7 @@ public class MemoriaRodadaRepository implements RodadaRepository {
     @Override
     public void remover(Rodada rodada) throws RepositoryException {
         if (!rodadas.remove(rodada)) {
-            throw new RepositoryException("Rodada não encontrada para remoção.");
+            throw new RepositoryException();
         }
     }
 }

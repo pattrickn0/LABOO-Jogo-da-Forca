@@ -61,7 +61,7 @@ public class MemoriaPalavraRepository implements PalavraRepository {
 
     @Override
     public void inserir(Palavra palavra) throws RepositoryException {
-        if (palavra == null) throw new RepositoryException("Palavra nula.");
+        if (palavra == null) throw new RepositoryException();
         pool.add(palavra);
     }
 

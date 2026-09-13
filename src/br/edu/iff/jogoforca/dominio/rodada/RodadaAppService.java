@@ -33,7 +33,7 @@ public class RodadaAppService {
     }
 
     public Rodada novaRodada(String nomeJogador) throws JogadorNaoEncontradoException {
-        Jogador jogador = jogadorRepository.getPorNome(nomeJogador);
+        Jogador jogador = jogadorRepository.getPorNome(nomeJogador)[0];
         if (jogador == null) {
             throw new JogadorNaoEncontradoException(nomeJogador);
         }

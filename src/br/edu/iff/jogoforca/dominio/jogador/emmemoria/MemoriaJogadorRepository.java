@@ -1,67 +1,73 @@
 package br.edu.iff.jogoforca.dominio.jogador.emmemoria;
 
-import br.edu.iff.jogoforca.dominio.jogador.Jogador;
-import br.edu.iff.jogoforca.dominio.jogador.JogadorRepository;
-import br.edu.iff.repository.RepositoryException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.iff.jogoforca.dominio.jogador.Jogador;
+import br.edu.iff.jogoforca.dominio.jogador.JogadorRepository;
+import br.edu.iff.repository.RepositoryException;
+
 public class MemoriaJogadorRepository implements JogadorRepository {
-    private static MemoriaJogadorRepository soleInstance;
-    private final List<Jogador> pool = new ArrayList<>();
-    private long idCounter = 1;
 
-    private MemoriaJogadorRepository() {}
+	private List<Jogador> pool;
+	private static MemoriaJogadorRepository soleInstance;
+	
+	public static MemoriaJogadorRepository getSoleInstance() {
+		if(soleInstance==null) {
+			soleInstance = new MemoriaJogadorRepository();
+		}
+		return soleInstance;
+	}
+	
+	private MemoriaJogadorRepository() {
+		pool = new ArrayList<Jogador>();
+	}
 
-    public static synchronized MemoriaJogadorRepository getSoleInstance() {
-        if (soleInstance == null) {
-            soleInstance = new MemoriaJogadorRepository();
-        }
-        return soleInstance;
-    }
+	@Override
+	public long getProximoId() {
+		return this.pool.size() + 1;
+	}
 
-    @Override
-    public long getProximoId() {
-        return idCounter++;
-    }
+	@Override
+	public Jogador getPorId(long id) {
+		for(Jogador jogador : this.pool) {
+			if(jogador.getId() == id) {
+				return jogador;
+			}
+		}
+		return null;
+	}
 
-    @Override
-    public Jogador getPorId(long id) {
-        for (Jogador j : pool) {
-            if (j.getId() == id) return j;
-        }
-        return null;
-    }
+	@Override
+	public Jogador[] getPorNome(String nome) {
+		List<Jogador> jogadoresEscolhidos = new ArrayList<Jogador>();
+		for(Jogador jogador : this.pool) {
+			if(jogador.getNome().compareTo(nome)==0) {
+				jogadoresEscolhidos.add(jogador);
+			}
+		}
+		return jogadoresEscolhidos.toArray(new Jogador[jogadoresEscolhidos.size()]);
+	}
 
-    @Override
-    public Jogador getPorNome(String nome) {
-        for (Jogador j : pool) {
-            if (j.getNome() != null && j.getNome().equalsIgnoreCase(nome)) {
-                return j;
-            }
-        }
-        return null;
-    }
+	@Override
+	public void inserir(Jogador jogador) throws RepositoryException {
+		if(this.pool.contains(jogador)) {
+			throw new RepositoryException();
+		}
+		this.pool.add(jogador);
+	}
 
-    @Override
-    public Jogador[] getTodos() {
-        return pool.toArray(new Jogador[0]);
-    }
+	@Override
+	public void atualizar(Jogador jogador) throws RepositoryException {
+		
+	}
 
-    @Override
-    public void inserir(Jogador jogador) throws RepositoryException {
-        if (jogador == null) throw new RepositoryException("Jogador nulo.");
-        pool.add(jogador);
-    }
-
-    @Override
-    public void atualizar(Jogador jogador) throws RepositoryException {
-        remover(jogador);
-        inserir(jogador);
-    }
-
-    @Override
-    public void remover(Jogador jogador) throws RepositoryException {
-        pool.removeIf(j -> j.getId() == jogador.getId());
-    }
+	@Override
+	public void remover(Jogador jogador) throws RepositoryException {
+		if(!this.pool.contains(jogador)) {
+			throw new RepositoryException();
+		}
+		this.pool.remove(jogador);
+	}
+	
 }
