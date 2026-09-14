@@ -52,22 +52,49 @@ public class Rodada extends ObjetoDominioImpl {
         return new Rodada(id, itens, erradas, jogador);
     }
 
-    public static BonecoFactory getBonecoFactory() { return bonecoFactory; }
-    public static void setBonecoFactory(BonecoFactory factory) { bonecoFactory = factory; }
+    public static BonecoFactory getBonecoFactory() {
+        return bonecoFactory;
+    }
 
-    public static int getMaxPalavras() { return maxPalavras; }
-    public static void setMaxPalavras(int max) { maxPalavras = max; }
+    public static void setBonecoFactory(BonecoFactory factory) {
+        bonecoFactory = factory;
+    }
 
-    public static int getMaxErros() { return maxErros; }
-    public static void setMaxErros(int max) { maxErros = max; }
+    public static int getMaxPalavras() {
+        return maxPalavras;
+    }
 
-    public static int getPontosQuandoDescobreTodasAsPalavras() { return pontosQuandoDescobreTodasAsPalavras; }
-    public static void setPontosQuandoDescobreTodasAsPalavras(int pontos) { pontosQuandoDescobreTodasAsPalavras = pontos; }
+    public static void setMaxPalavras(int max) {
+        maxPalavras = max;
+    }
 
-    public static int getPontosPorLetraEncoberta() { return pontosPorLetraEncoberta; }
-    public static void setPontosPorLetraEncoberta(int pontos) { pontosPorLetraEncoberta = pontos; }
+    public static int getMaxErros() {
+        return maxErros;
+    }
 
-    public Jogador getJogador() { return jogador; }
+    public static void setMaxErros(int max) {
+        maxErros = max;
+    }
+
+    public static int getPontosQuandoDescobreTodasAsPalavras() {
+        return pontosQuandoDescobreTodasAsPalavras;
+    }
+
+    public static void setPontosQuandoDescobreTodasAsPalavras(int pontos) {
+        pontosQuandoDescobreTodasAsPalavras = pontos;
+    }
+
+    public static int getPontosPorLetraEncoberta() {
+        return pontosPorLetraEncoberta;
+    }
+
+    public static void setPontosPorLetraEncoberta(int pontos) {
+        pontosPorLetraEncoberta = pontos;
+    }
+
+    public Jogador getJogador() {
+        return jogador;
+    }
 
     public Tema getTema() {
         if (itens.length > 0) {
@@ -89,19 +116,21 @@ public class Rodada extends ObjetoDominioImpl {
     }
 
     public void tentar(char codigo) {
-        if (encerrou()) return;
-        
+        if (encerrou())
+            return;
+
         boolean achou = false;
         for (Item item : itens) {
             if (item.tentar(codigo)) {
                 achou = true;
             }
         }
-        
+
         if (!achou) {
             boolean jaTentada = false;
             for (Letra l : erradas) {
-                if (Character.toLowerCase(l.getCodigo()) == Character.toLowerCase(codigo)) jaTentada = true;
+                if (Character.toLowerCase(l.getCodigo()) == Character.toLowerCase(codigo))
+                    jaTentada = true;
             }
             if (!jaTentada) {
                 Letra novaLetra = Palavra.getLetraFactory().getLetra(codigo);
@@ -111,21 +140,22 @@ public class Rodada extends ObjetoDominioImpl {
                 erradas = novasErradas;
             }
         }
-        
+
         if (encerrou()) {
             jogador.setPontuacao(jogador.getPontuacao() + calcularPontos());
         }
     }
 
     public void arriscar(String[] palavras) {
-        if (encerrou()) return;
-        
+        if (encerrou())
+            return;
+
         for (int i = 0; i < itens.length; i++) {
             if (i < palavras.length) {
                 itens[i].arriscar(palavras[i]);
             }
         }
-        
+
         if (encerrou()) {
             jogador.setPontuacao(jogador.getPontuacao() + calcularPontos());
         }
@@ -161,8 +191,10 @@ public class Rodada extends ObjetoDominioImpl {
         System.out.println();
     }
 
-    public Letra[] getErradas() { return erradas; }
-    
+    public Letra[] getErradas() {
+        return erradas;
+    }
+
     public Letra[] getCertas() {
         java.util.Set<Letra> certasSet = new java.util.LinkedHashSet<>();
         for (Item item : itens) {
@@ -172,7 +204,7 @@ public class Rodada extends ObjetoDominioImpl {
         }
         return certasSet.toArray(new Letra[0]);
     }
-    
+
     public Letra[] getTentativas() {
         Letra[] certas = getCertas();
         Letra[] todas = new Letra[certas.length + erradas.length];
@@ -181,7 +213,9 @@ public class Rodada extends ObjetoDominioImpl {
         return todas;
     }
 
-    public int getQtdeErros() { return erradas.length; }
+    public int getQtdeErros() {
+        return erradas.length;
+    }
 
     public int getQtdeAcertos() {
         int acertos = 0;
@@ -201,7 +235,8 @@ public class Rodada extends ObjetoDominioImpl {
 
     public boolean descobriu() {
         for (Item item : itens) {
-            if (!item.descobriu()) return false;
+            if (!item.descobriu())
+                return false;
         }
         return true;
     }
