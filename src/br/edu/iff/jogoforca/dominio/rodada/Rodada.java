@@ -31,7 +31,7 @@ public class Rodada extends ObjetoDominioImpl {
             this.itens[i] = Item.criar(i, palavras[i]);
         }
         this.erradas = new Letra[0];
-        getBonecoFactory().getBoneco(); // "chama getBonecoFactory() para criar o boneco"
+        getBonecoFactory().getBoneco();
     }
 
     private Rodada(long id, Item[] itens, Letra[] erradas, Jogador jogador) {
@@ -150,10 +150,14 @@ public class Rodada extends ObjetoDominioImpl {
         if (encerrou())
             return;
 
-        for (int i = 0; i < itens.length; i++) {
-            if (i < palavras.length) {
-                itens[i].arriscar(palavras[i]);
+        try {
+            for (int i = 0; i < itens.length; i++) {
+                if (i < palavras.length) {
+                    itens[i].arriscar(palavras[i]);
+                }
             }
+        } catch (Exception e) {
+            System.err.println("Erro ao arriscar palavras na Rodada: " + e.getMessage());
         }
 
         if (encerrou()) {
