@@ -37,15 +37,15 @@ public class Palavra extends ObjetoDominioImpl {
     }
 
     public int[] tentar(char codigo) {
-        int count = 0;
-        char lower = Character.toLowerCase(codigo);
+        int quantidade = 0;
+        char minuscula = Character.toLowerCase(codigo);
         for (Letra l : letras) {
-            if (Character.toLowerCase(l.getCodigo()) == lower) count++;
+            if (Character.toLowerCase(l.getCodigo()) == minuscula) quantidade++;
         }
-        int[] posicoes = new int[count];
+        int[] posicoes = new int[quantidade];
         int j = 0;
         for (int i = 0; i < letras.length; i++) {
-            if (Character.toLowerCase(letras[i].getCodigo()) == lower) {
+            if (Character.toLowerCase(letras[i].getCodigo()) == minuscula) {
                 posicoes[j++] = i;
             }
         }

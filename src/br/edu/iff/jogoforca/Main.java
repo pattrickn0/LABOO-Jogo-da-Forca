@@ -2,6 +2,13 @@ package br.edu.iff.jogoforca;
 
 import br.edu.iff.jogoforca.dominio.rodada.Rodada;
 import br.edu.iff.jogoforca.dominio.rodada.RodadaAppService;
+import br.edu.iff.bancodepalavras.dominio.tema.Tema;
+import br.edu.iff.bancodepalavras.dominio.tema.TemaFactory;
+import br.edu.iff.bancodepalavras.dominio.tema.TemaRepository;
+import br.edu.iff.bancodepalavras.dominio.palavra.PalavraAppService;
+import br.edu.iff.jogoforca.dominio.jogador.Jogador;
+import br.edu.iff.jogoforca.dominio.jogador.JogadorFactory;
+import br.edu.iff.jogoforca.dominio.jogador.JogadorRepository;
 
 import java.util.Scanner;
 
@@ -11,32 +18,28 @@ public class Main {
         app.configurar();
 
         try {
-            // 2) Criar e inserir Temas
-            br.edu.iff.bancodepalavras.dominio.tema.TemaFactory temaFactory = app.getTemaFactory();
-            br.edu.iff.bancodepalavras.dominio.tema.TemaRepository temaRepo = app.getRepositoryFactory()
-                    .getTemaRepository();
+            TemaFactory temaFactory = app.getTemaFactory();
+            TemaRepository temaRepo = app.getRepositoryFactory().getTemaRepository();
 
-            br.edu.iff.bancodepalavras.dominio.tema.Tema tema1 = temaFactory.getTema("Animais");
-            br.edu.iff.bancodepalavras.dominio.tema.Tema tema2 = temaFactory.getTema("Frutas");
-            br.edu.iff.bancodepalavras.dominio.tema.Tema tema3 = temaFactory.getTema("Paises");
-            br.edu.iff.bancodepalavras.dominio.tema.Tema tema4 = temaFactory.getTema("Cores");
-            br.edu.iff.bancodepalavras.dominio.tema.Tema tema5 = temaFactory.getTema("Profissoes");
+            Tema tema1 = temaFactory.getTema("Animais");
             temaRepo.inserir(tema1);
+            Tema tema2 = temaFactory.getTema("Frutas");
             temaRepo.inserir(tema2);
+            Tema tema3 = temaFactory.getTema("Paises");
             temaRepo.inserir(tema3);
+            Tema tema4 = temaFactory.getTema("Cores");
             temaRepo.inserir(tema4);
+            Tema tema5 = temaFactory.getTema("Profissoes");
             temaRepo.inserir(tema5);
 
-            // 3) Criar/Inserir Palavras
-            br.edu.iff.bancodepalavras.dominio.palavra.PalavraAppService palavraService = br.edu.iff.bancodepalavras.dominio.palavra.PalavraAppService
-                    .getSoleInstance();
+            PalavraAppService palavraService = PalavraAppService.getSoleInstance();
 
-            String[] animais = { "CACHORRO", "GATO", "ELEFANTE", "GIRAFA", "LEÃO", "TIGRE", "ZEBRA", "MACACO", "CAVALO",
+            String[] animais = { "CACHORRO", "GATO", "ELEFANTE", "GIRAFA", "LEAO", "TIGRE", "ZEBRA", "MACACO", "CAVALO",
                     "URSO" };
             for (String p : animais)
                 palavraService.novaPalavra(p, tema1.getId());
 
-            String[] frutas = { "MAÇA", "BANANA", "LARANJA", "MORANGO", "UVA", "ABACAXI", "MELANCIA", "MANGA", "PERA",
+            String[] frutas = { "MACA", "BANANA", "LARANJA", "MORANGO", "UVA", "ABACAXI", "MELANCIA", "MANGA", "PERA",
                     "KIWI" };
             for (String p : frutas)
                 palavraService.novaPalavra(p, tema2.getId());
@@ -56,21 +59,21 @@ public class Main {
             for (String p : profissoes)
                 palavraService.novaPalavra(p, tema5.getId());
 
-            // 4) Criar e inserir Jogador
-            br.edu.iff.jogoforca.dominio.jogador.JogadorFactory jogadorFactory = app.getJogadorFactory();
-            br.edu.iff.jogoforca.dominio.jogador.JogadorRepository jogadorRepo = app.getRepositoryFactory()
-                    .getJogadorRepository();
-            br.edu.iff.jogoforca.dominio.jogador.Jogador jogador = jogadorFactory.getJogador("Membro");
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Digite o nome do jogador: ");
+            String nomeJogador = scanner.nextLine().trim();
+
+            JogadorFactory jogadorFactory = app.getJogadorFactory();
+            JogadorRepository jogadorRepo = app.getRepositoryFactory().getJogadorRepository();
+            Jogador jogador = jogadorFactory.getJogador(nomeJogador);
             jogadorRepo.inserir(jogador);
 
-            // 5) Jogar em loop
-            Scanner scanner = new Scanner(System.in);
             RodadaAppService rodadaService = RodadaAppService.getSoleInstance();
             boolean continuar = true;
 
             while (continuar) {
-                System.out.println("\n====== INÍCIO DO JOGO DA FORCA ======");
-                Rodada rodada = rodadaService.novaRodada("Membro");
+                System.out.println("\n====== INICIO DO JOGO DA FORCA ======");
+                Rodada rodada = rodadaService.novaRodada(nomeJogador);
 
                 if (rodada != null && rodada.getTema() != null) {
                     System.out.println("Tema: " + rodada.getTema().getNome());
@@ -80,7 +83,8 @@ public class Main {
                 }
 
                 while (!rodada.encerrou()) {
-                    System.out.println("\nErros: " + rodada.getQtdeErros() + "/" + Rodada.getMaxErros());
+                    System.out.println("\n======================================");
+                    System.out.println("Erros: " + rodada.getQtdeErros() + "/" + Rodada.getMaxErros());
                     rodada.exibirBoneco(System.out);
 
                     System.out.println("\nPalavra(s):");
@@ -89,7 +93,7 @@ public class Main {
                     System.out.println("\nLetras erradas: ");
                     rodada.exibirLetrasErradas(System.out);
 
-                    System.out.println("\nDigite uma letra (ou 'arriscar' para tentar as palavras): ");
+                    System.out.print("\nDigite uma letra (ou 'arriscar' para tentar as palavras): ");
                     String entrada = scanner.nextLine().trim().toLowerCase();
 
                     if (entrada.equals("arriscar")) {
@@ -100,7 +104,20 @@ public class Main {
                         }
                         rodada.arriscar(tentativa);
                     } else if (entrada.length() == 1) {
-                        rodada.tentar(entrada.charAt(0));
+                        char letraDigitada = entrada.charAt(0);
+                        boolean jaDigitou = false;
+                        for (br.edu.iff.bancodepalavras.dominio.letra.Letra l : rodada.getTentativas()) {
+                            if (Character.toLowerCase(l.getCodigo()) == Character.toLowerCase(letraDigitada)) {
+                                jaDigitou = true;
+                                break;
+                            }
+                        }
+
+                        if (jaDigitou) {
+                            System.out.println(">>> Você já tentou a letra '" + letraDigitada + "'! Tente outra.");
+                        } else {
+                            rodada.tentar(letraDigitada);
+                        }
                     } else {
                         System.out.println("Entrada inválida. Digite uma letra ou 'arriscar'. ");
                     }

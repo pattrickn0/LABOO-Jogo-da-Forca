@@ -70,11 +70,11 @@ public class Item {
     }
 
     public int getQtdeLetrasEncobertas() {
-        int count = 0;
+        int quantidade = 0;
         for (boolean descoberta : posicoesDescobertas) {
-            if (!descoberta) count++;
+            if (!descoberta) quantidade++;
         }
-        return count;
+        return quantidade;
     }
 
     public int calcularPontosLetrasEncobertas(int valorPorLetraEncoberta) {
@@ -91,20 +91,28 @@ public class Item {
 
     public boolean tentar(char codigo) {
         boolean achou = false;
-        if (palavraArriscada == null) {
-            int[] posicoes = palavra.tentar(codigo);
-            if (posicoes != null && posicoes.length > 0) {
-                achou = true;
-                for (int pos : posicoes) {
-                    posicoesDescobertas[pos] = true;
+        try {
+            if (palavraArriscada == null) {
+                int[] posicoes = palavra.tentar(codigo);
+                if (posicoes != null && posicoes.length > 0) {
+                    achou = true;
+                    for (int posicao : posicoes) {
+                        posicoesDescobertas[posicao] = true;
+                    }
                 }
             }
+        } catch (Exception e) {
+            System.err.println("Erro ao tentar letra no Item: " + e.getMessage());
         }
         return achou;
     }
 
     public void arriscar(String palavra) {
-        this.palavraArriscada = palavra;
+        try {
+            this.palavraArriscada = palavra;
+        } catch (Exception e) {
+            System.err.println("Erro ao arriscar palavra: " + e.getMessage());
+        }
     }
 
     public String getPalavraArriscada() {

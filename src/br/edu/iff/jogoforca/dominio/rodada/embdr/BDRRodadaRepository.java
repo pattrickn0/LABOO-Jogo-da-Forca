@@ -20,20 +20,29 @@ public class BDRRodadaRepository implements RodadaRepository {
     }
 
     @Override
-    public long getProximoId() { return 0; /* Integração com BD */ }
+    public long getProximoId() {
+        return 0;
+    }
 
     @Override
-    public Rodada getPorId(long id) { return null; /* Integração com BD */ }
+    public Rodada getPorId(long id) {
+        return null;
+    }
 
     @Override
-    public Rodada[] getPorJogador(Jogador jogador) { return new Rodada[0]; /* Integração com BD */ }
+    public Rodada[] getPorJogador(Jogador jogador) {
+        return new Rodada[0];
+    }
 
     @Override
-    public void inserir(Rodada rodada) throws RepositoryException { /* Integração com BD */ }
+    public void inserir(Rodada rodada) throws RepositoryException {
+    }
 
     @Override
-    public void atualizar(Rodada rodada) throws RepositoryException { /* Integração com BD */ }
+    public void atualizar(Rodada rodada) throws RepositoryException {
+    }
 
     @Override
-    public void remover(Rodada rodada) throws RepositoryException { /* Integração com BD */ }
+    public void remover(Rodada rodada) throws RepositoryException {
+    }
 }
